@@ -8,9 +8,9 @@ class MediaError(RuntimeError):
     pass
 
 
-def run(cmd, binary=False):
+def run(cmd, binary=False, cwd=None):
     """Run a command, return stdout. Raise MediaError with the tail of stderr."""
-    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
     if proc.returncode != 0:
         tail = proc.stderr.decode("utf-8", "replace").strip().splitlines()[-6:]
         raise MediaError("%s failed: %s" % (cmd[0], " | ".join(tail)))
